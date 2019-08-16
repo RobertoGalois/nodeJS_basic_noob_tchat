@@ -1,8 +1,10 @@
+const express = require('express');
 const http = require('http');
-const fs = require('fs');
+const socketIO = require('socket.io');
 
+const app = express();
 const server = http.createServer();
-const io = require('socket.io').listen(server);
+const io = socketIO.listen(server);
 
 const datas = {
 	victor: {
@@ -22,10 +24,23 @@ const datas = {
 	}
 }
 
-server.on('request', function(req, res) {
+app.get('/', (req, res) => {
+	res.status(200).setHeader('Content-Type', 'text/html');
+	res.render('index.ejs');
+})
+.get('/jq.js', (req, res) => {
+	res.status(200).setHeader('Content-Type', 'application/javascript');
+	res.render('jq.ejs');
+})
+.get('/socket.io/socket.io.js', (req, res) => {
+	res.status(200).setHeader('Content-Type', 'application/javascript');
+})
+.use((req, res) => {
+	res.status(301).redirect('/');
+})
 
+/*
 	if (req.url === '/jq.js') {
-        res.writeHead(200, {"Content-Type": "application/javascript"});
     	fs.readFile('jq.js', 'utf-8', function(error, content) {
 			res.end(content);	
 		});
@@ -46,5 +61,6 @@ io.sockets.on('connection', function (socket) {
 		console.log(datas);
 	});
 });
+*/
 
-server.listen(8080);
+app.listen(8080);
