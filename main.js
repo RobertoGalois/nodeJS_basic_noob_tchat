@@ -1,9 +1,7 @@
-const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
-const Entities = require('html-entities').AllHtmlEntities;
+const entities = new (require('html-entities').AllHtmlEntities)();
 
-const entities = new Entities();
 const app = express();
 const server = app.listen(8080);
 const io = socketIO.listen(server);
